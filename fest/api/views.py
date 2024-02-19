@@ -9,9 +9,9 @@ from .serializer import RegistrationSerializer
 
 @csrf_exempt
 def create_registration(request):
-    data = request.data.get('formData')
+    data = request.POST.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')
-    members_data = request.data.get('groupFormData')
+    members_data = request.POST.get('groupFormData')
     if data['group_members_count'] == '':
         data['group_members_count'] = 1
     registration = Registration(**data)
