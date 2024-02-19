@@ -6,8 +6,9 @@ from django.http import JsonResponse
 from .serializer import RegistrationSerializer
 
 
-@api_view(['POST'])
+
 @csrf_exempt
+@api_view(['POST'])
 def create_registration(request):
     data = request.data.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')
