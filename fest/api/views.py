@@ -8,7 +8,6 @@ from .serializer import RegistrationSerializer
 
 
 @csrf_exempt
-@api_view(['POST'])
 def create_registration(request):
     data = request.data.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')
@@ -38,5 +37,5 @@ def create_registration(request):
         m_data['registration'] = registration
         member = GroupMember(**m_data)
         member.save()
-    return Response(data={'info': registration.id})
+    return JsonResponse(data={'info': registration.id})
         
