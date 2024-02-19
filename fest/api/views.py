@@ -4,14 +4,16 @@ from fest.models import Registration, GroupMember
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .serializer import RegistrationSerializer
+import json
 
 
 
 @csrf_exempt
 def create_registration(request):
-    data = request.POST.get('formData')
+    json_data = json.loads(request.body.decode('utf-8'))
+    data = json_data.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')
-    members_data = request.POST.get('groupFormData')
+    members_data = json_data.get('groupFormData')
     if data['group_members_count'] == '':
         data['group_members_count'] = 1
     registration = Registration(**data)
