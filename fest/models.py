@@ -27,6 +27,7 @@ class Registration(models.Model):
     transaction_id = models.CharField(max_length=100)
     ip_address = models.GenericIPAddressField()
     is_approved = models.BooleanField(default=False)
+    added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     
 class GroupMember(models.Model):
