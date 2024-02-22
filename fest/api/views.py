@@ -2,12 +2,28 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from fest.models import Registration, GroupMember
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from .serializer import RegistrationSerializer
+from rest_framework import status
 import json
 
+@api_view()
+def get_admin_username(request):
+    data = {'username': None}
+    if request.user.is_authenticated:
+        data['username'] = request.user.first_name + " " + request.user.last_name
+    return Response(data=data)
 
 
+@api_view(['POST'])
+def user_login(request):
+    if user:= authenticate(request, username=request.data.get('username'), password=request.data.get('password')):
+        print(user)
+        return Response(data={'info': 'ok', 'username': user.get_username()})
+    else:
+        return Response(data={'info': 'not ok'}, status=status.HTTP_401_UNAUTHORIZED)
+    
 @csrf_exempt
 def create_registration(request):
     json_data = json.loads(request.body.decode('utf-8'))
