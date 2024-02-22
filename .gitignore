@@ -4,7 +4,6 @@ venv
 *.log
 *.pot
 *.pyc
-*.pdf
 __pycache__/
 local_settings.py
 playground.py
