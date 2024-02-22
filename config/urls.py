@@ -19,9 +19,12 @@ from django.urls import path, re_path, include
 from django.views.generic import TemplateView
 from fest import views
 
+exclude_prefixes = ['admin']
+exclude_pattern = '|'.join(exclude_prefixes)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('fest.api.urls')),
     path('assets/<str:filename>', views.download_asset),
-    re_path(r'^.*$', TemplateView.as_view(template_name='main_site/index.html'))
+    re_path(rf'^(?!({exclude_pattern})/).*$', TemplateView.as_view(template_name='main_site/index.html'))
 ]
