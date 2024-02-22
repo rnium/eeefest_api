@@ -1,11 +1,15 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from fest.models import Registration, GroupMember
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.utils import timezone
 from .serializer import RegistrationSerializer
 from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
 import json
 
 @api_view()
@@ -23,6 +27,28 @@ def user_login(request):
         return Response(data={'info': 'ok', 'username': user.get_username()})
     else:
         return Response(data={'info': 'not ok'}, status=status.HTTP_401_UNAUTHORIZED)
+    
+    
+class RegistrationsList(ListAPIView):
+    serializer_class = RegistrationSerializer
+    def get_queryset(self):
+        contest = self.request.GET.get('contest', 'all')
+        approval = self.request.GET.get('approval', 'all')
+        if contest == 'all':
+            if approval == 'all':
+                return Registration.objects.all().order_by('-added_at')
+            elif approval == 'approved':
+                return Registration.objects.filter(is_approved=True).order_by('-added_at')
+            else:
+                return Registration.objects.filter(is_approved=False).order_by('-added_at')
+        else:
+            if approval == 'all':
+                return Registration.objects.filter(contest=contest).order_by('-added_at')
+            elif approval == 'approved':
+                return Registration.objects.filter(contest=contest, is_approved=True).order_by('-added_at')
+            else:
+                return Registration.objects.filter(contest=contest, is_approved=False).order_by('-added_at')
+    
     
 @csrf_exempt
 def create_registration(request):
@@ -56,4 +82,17 @@ def create_registration(request):
         member = GroupMember(**m_data)
         member.save()
     return JsonResponse(data={'info': registration.id})
-        
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def approve_registration(request, pk):
+    reg = get_object_or_404(Registration, pk=pk)
+    if reg.is_approved:
+        return Response(data={"info": f'Regisration: {reg.id} Already Approved!'}, status=status.HTTP_400_BAD_REQUEST)
+    reg.is_approved = True
+    reg.approved_by = request.user
+    reg.approved_at = timezone.now()
+    reg.save()
+    return Response(data={"info": f'Regisration: {reg.id} Approved'})
+    

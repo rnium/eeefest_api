@@ -15,11 +15,6 @@ class Registration(models.Model):
         ('rocket', 'DBBL Rocket'),
         ('nagad', 'Nagad'),
     ]
-    deptartments = [
-        ('eee', 'Electrical & Electronic Engineering'),
-        ('cse', 'Computer Science Engineering'),
-        ('ce', 'Civil Engineering'),
-    ]
     contest = models.CharField(max_length=20, choices=contest_choices)
     team_name = models.CharField(max_length=500, null=True, blank=True)
     group_members_count = models.IntegerField(default=1)
