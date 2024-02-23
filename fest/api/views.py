@@ -59,9 +59,9 @@ class RegistrationsList(ListAPIView):
         return registrations
     
     
-@csrf_exempt
+@api_view(['POST'])
 def create_registration(request):
-    json_data = json.loads(request.body.decode('utf-8'))
+    json_data = request.data
     data = json_data.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')
     members_data = json_data.get('groupFormData')
@@ -70,7 +70,6 @@ def create_registration(request):
     registration = Registration(**data)
     registration.save()
     for member_key in members_data:
-        print(member_key)
         m_data = members_data[member_key]
         if member_key != 'others' and len(m_data.get('name', '')) == 0:
             continue
@@ -89,7 +88,11 @@ def create_registration(request):
                 m_data.pop('reg')
         m_data['registration'] = registration
         member = GroupMember(**m_data)
-        member.save()
+        try:
+            member.save()
+        except Exception as e:
+            registration.delete()
+            return JsonResponse(data={'info': "Cannot add people! Please Contact Administrator"})
     return JsonResponse(data={'info': registration.id})
 
 
