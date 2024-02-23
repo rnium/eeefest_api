@@ -13,10 +13,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
         
     def get_team_leader(self, obj):
         member_1 = obj.groupmember_set.all().first()
-        return {
-            "name": member_1.name, 
-            "inst": member_1.inst, 
-        }
+        if member_1:
+            return {
+                "name": member_1.name, 
+                "inst": member_1.inst, 
+            }
+        else:
+            return "<empty>"
     
     def get_approval_link(self, obj):
         return reverse("fest_api:approve_registration", args=(obj.id,))
