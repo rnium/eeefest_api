@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from fest.models import Registration, GroupMember
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -23,11 +23,16 @@ def get_admin_username(request):
 @api_view(['POST'])
 def user_login(request):
     if user:= authenticate(request, username=request.data.get('username'), password=request.data.get('password')):
-        print(user)
+        login(request, user)
         return Response(data={'info': 'ok', 'username': user.get_username()})
     else:
         return Response(data={'info': 'not ok'}, status=status.HTTP_401_UNAUTHORIZED)
-    
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def user_logout(request):
+    logout(request)
+    return Response(data={'info': 'Logged out'})
     
 class RegistrationsList(ListAPIView):
     serializer_class = RegistrationSerializer
