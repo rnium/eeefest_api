@@ -2,6 +2,7 @@ from rest_framework import serializers
 from fest.models import Registration
 from django.urls import reverse
 
+
 class RegistrationSerializer(serializers.ModelSerializer):
     team_leader = serializers.SerializerMethodField()
     approval_link = serializers.SerializerMethodField()

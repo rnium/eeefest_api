@@ -34,20 +34,24 @@ class RegistrationsList(ListAPIView):
     def get_queryset(self):
         contest = self.request.GET.get('contest', 'all')
         approval = self.request.GET.get('approval', 'all')
+        registrations = None
         if contest == 'all':
             if approval == 'all':
-                return Registration.objects.all().order_by('-added_at')
+                registrations = Registration.objects.all()
             elif approval == 'approved':
-                return Registration.objects.filter(is_approved=True).order_by('-added_at')
+                registrations = Registration.objects.filter(is_approved=True)
             else:
-                return Registration.objects.filter(is_approved=False).order_by('-added_at')
+                registrations = Registration.objects.filter(is_approved=False)
         else:
             if approval == 'all':
-                return Registration.objects.filter(contest=contest).order_by('-added_at')
+                registrations = Registration.objects.filter(contest=contest)
             elif approval == 'approved':
-                return Registration.objects.filter(contest=contest, is_approved=True).order_by('-added_at')
+                registrations = Registration.objects.filter(contest=contest, is_approved=True)
             else:
-                return Registration.objects.filter(contest=contest, is_approved=False).order_by('-added_at')
+                registrations = Registration.objects.filter(contest=contest, is_approved=False)
+        if registrations != None:
+            registrations = registrations.order_by('is_approved', '-added_at')
+        return registrations
     
     
 @csrf_exempt
