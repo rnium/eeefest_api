@@ -92,7 +92,7 @@ def create_registration(request):
             member.save()
         except Exception as e:
             registration.delete()
-            return JsonResponse(data={'info': "Cannot add people! Please Contact Administrator"})
+            return JsonResponse(data={'info': "Cannot add people! Please Contact Administrator"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     return JsonResponse(data={'info': registration.id})
 
 
