@@ -16,7 +16,7 @@ import json
 def get_admin_username(request):
     data = {'username': None}
     if request.user.is_authenticated:
-        data['username'] = request.user.first_name + " " + request.user.last_name
+        data['username'] = request.user.get_username()
     return Response(data=data)
 
 

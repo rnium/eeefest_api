@@ -124,6 +124,7 @@ STATIC_ROOT = BASE_DIR / 'static'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'frontend/main_site/static',
+    BASE_DIR / 'frontend/admin_site/static',
 ]
 
 # Default primary key field type

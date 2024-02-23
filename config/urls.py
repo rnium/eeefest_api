@@ -23,8 +23,9 @@ exclude_prefixes = ['admin']
 exclude_pattern = '|'.join(exclude_prefixes)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('django-admin/', admin.site.urls),
     path('api/', include('fest.api.urls')),
     path('assets/<str:filename>', views.download_asset),
+    path('admin', TemplateView.as_view(template_name='admin_site/index.html')),
     re_path(rf'^(?!({exclude_pattern})/).*$', TemplateView.as_view(template_name='main_site/index.html'))
 ]
