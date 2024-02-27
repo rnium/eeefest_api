@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from fest.models import Registration
+from fest.models import Registration, GroupMember
 from django.urls import reverse
 
 

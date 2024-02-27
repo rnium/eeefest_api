@@ -10,7 +10,7 @@ from .serializer import RegistrationSerializer
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
-import json
+from .utils import check_registration_data
 
 @api_view()
 def get_admin_username(request):
@@ -65,34 +65,21 @@ def create_registration(request):
     data = json_data.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')
     members_data = json_data.get('groupFormData')
+    success, info = check_registration_data(data, members_data)
+    if not success:
+        return Response(data={'info': info}, status=status.HTTP_400_BAD_REQUEST)
     if data['group_members_count'] == '':
         data['group_members_count'] = 1
-    registration = Registration(**data)
-    registration.save()
+    reg_serializer = RegistrationSerializer(data=data)
+    if reg_serializer.is_valid():
+        registration = reg_serializer.save()
+    print(registration)
     for member_key in members_data:
-        m_data = members_data[member_key]
-        if member_key != 'others' and len(m_data.get('name', '')) == 0:
-            continue
-        if member_key == 'others':
-            if len(m_data) > 0:
-                m_data = {}
-                m_data['other_info'] = members_data[member_key]
-            else:
-                continue
-        elif member_key == 'team_leader':
-            if 'reg' in m_data :
-                m_data['reg_num'] = m_data['reg']
-                m_data.pop('reg')
-        else:
-            if 'reg' in m_data:
-                m_data.pop('reg')
-        m_data['registration'] = registration
-        member = GroupMember(**m_data)
-        try:
-            member.save()
-        except Exception as e:
-            return JsonResponse(data={'info': f"Cannot add people! Please Contact Administrator [error: {e}]"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return JsonResponse(data={'info': registration.id})
+        member_data = members_data[member_key]
+        member_data['registration'] = registration
+        member = GroupMember(**member_data)
+        member.save()
+    return Response(data={'info': "Saved"})
 
 
 @api_view()
