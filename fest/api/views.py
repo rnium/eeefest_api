@@ -73,7 +73,6 @@ def create_registration(request):
     reg_serializer = RegistrationSerializer(data=data)
     if reg_serializer.is_valid():
         registration = reg_serializer.save()
-    print(registration)
     for member_key in members_data:
         member_data = members_data[member_key]
         member_data['registration'] = registration
