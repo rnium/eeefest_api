@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from fest.models import Registration
-allowed_gateways = ['rocket', 'nagad']
+allowed_gateways = ['rocket', 'nagad', 'bkash']
 
 
 def check_registration_fields(reg_data):

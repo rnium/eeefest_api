@@ -12,6 +12,7 @@ class Registration(models.Model):
         ('gaming-chess', "Gaming [Chess]"),
     ]
     gateways = [
+        ('bkash', 'bKash'),
         ('rocket', 'DBBL Rocket'),
         ('nagad', 'Nagad'),
     ]
