@@ -20,7 +20,7 @@ class Registration(models.Model):
     group_members_count = models.IntegerField(default=1)
     gateway = models.CharField(max_length=100, choices=gateways, default='rokcet')
     paying_number = models.CharField(max_length=100, null=True)
-    transaction_id = models.CharField(max_length=100)
+    transaction_id = models.CharField(max_length=100, unique=True)
     ip_address = models.GenericIPAddressField()
     is_approved = models.BooleanField(default=False)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
