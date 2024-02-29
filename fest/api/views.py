@@ -73,6 +73,9 @@ def create_registration(request):
     reg_serializer = RegistrationSerializer(data=data)
     if reg_serializer.is_valid():
         registration = reg_serializer.save()
+    else:
+        print(reg_serializer.errors)
+        return Response(data={'info': "Cannnot register"}, status=status.HTTP_400_BAD_REQUEST)
     for member_key in members_data:
         member_data = members_data[member_key]
         member_data['registration'] = registration

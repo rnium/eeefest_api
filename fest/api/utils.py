@@ -21,9 +21,9 @@ def check_member_fields(member_data):
 
 
 def check_registration_data(registration_data, members_data):
-    registrations_qs = Registration.objects.filter(transaction_id=registration_data['transaction_id'])
-    if registrations_qs.count() > 0:
-        return (False, "Transaction id already used in another registration")
+    # registrations_qs = Registration.objects.filter(transaction_id=registration_data['transaction_id'])
+    # if registrations_qs.count() > 0:
+    #     return (False, "Transaction id already used in another registration")
     if registration_data['contest'] in ['lfr', 'poster']:
         if registration_data['group_members_count'] != len(members_data):
             return (False, "Member Count mismatch")
