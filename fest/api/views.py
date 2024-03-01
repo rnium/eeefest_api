@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from .utils import check_registration_data
+from fest.utils import get_registrations_queryset
 
 @api_view()
 def get_admin_username(request):
@@ -39,24 +40,7 @@ class RegistrationsList(ListAPIView):
     def get_queryset(self):
         contest = self.request.GET.get('contest', 'all')
         approval = self.request.GET.get('approval', 'all')
-        registrations = None
-        if contest == 'all':
-            if approval == 'all':
-                registrations = Registration.objects.all()
-            elif approval == 'approved':
-                registrations = Registration.objects.filter(is_approved=True)
-            else:
-                registrations = Registration.objects.filter(is_approved=False)
-        else:
-            if approval == 'all':
-                registrations = Registration.objects.filter(contest=contest)
-            elif approval == 'approved':
-                registrations = Registration.objects.filter(contest=contest, is_approved=True)
-            else:
-                registrations = Registration.objects.filter(contest=contest, is_approved=False)
-        if registrations != None:
-            registrations = registrations.order_by('is_approved', '-added_at')
-        return registrations
+        return get_registrations_queryset(contest, approval)
     
     
 @api_view(['POST'])
