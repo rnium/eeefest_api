@@ -11,6 +11,15 @@ from openpyxl.styles import Alignment
 from .utils import get_group_type_excel_data, get_individual_type_excel_data
 
 
+def admin_required(view_func):
+    def inner(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view_func(request, *args, **kwargs)
+        else:
+            return HttpResponse("Access Denied")
+    return inner
+        
+    
 
 def download_asset(request, filename):
     filepath = settings.BASE_DIR / ('frontend/main_site/static/assets/' + filename)
@@ -20,6 +29,7 @@ def download_asset(request, filename):
     return HttpResponse(f"File not found!")
 
 
+@admin_required
 def download_response_excel(request):
     contest = request.GET.get('contest', 'all')
     approval = request.GET.get('approval', 'all')
