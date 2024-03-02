@@ -26,7 +26,7 @@ urlpatterns = [
     path('django-admin/', admin.site.urls),
     path('api/', include('fest.api.urls')),
     path('assets/<str:filename>', views.download_asset),
-    path('responsedata/', views.download_response_excel, name="download_response_excel"),
+    path('responseexcel/', views.download_response_excel, name="download_response_excel"),
     # react apps
     path('admin', TemplateView.as_view(template_name='admin_site/index.html')),
     path('admin/', TemplateView.as_view(template_name='admin_site/index.html')),

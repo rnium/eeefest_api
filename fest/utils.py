@@ -25,7 +25,7 @@ def get_registrations_queryset(contest, approval):
 def get_group_type_excel_data(contest, approval):
     registrations = list(get_registrations_queryset(contest, approval))
     data = []
-    header = ["SL", 'reg_date', 'contest', 'approval status', 'Team Name', 'Total Members', 'Team Leader']
+    header = ["SL", 'Applied at', 'Contest', 'Approval Status', 'Team Name', 'Total Members', 'Team Leader']
     max_members = 1
     for index, reg in enumerate(registrations):
         unit_data = [index+1]
@@ -59,14 +59,12 @@ def get_group_type_excel_data(contest, approval):
 def get_individual_type_excel_data(contest, approval):
     registrations = list(get_registrations_queryset(contest, approval))
     data = []
-    header = ["SL", 'reg_date', 'contest', 'approval status', 'Contestant Name']
+    header = ["SL", 'Applied at', 'Contest', 'Approval status', 'Contestant Info']
     for index, reg in enumerate(registrations):
         unit_data = [index+1]
-        unit_data.append(reg.added_at)
+        unit_data.append(reg.added_at.strftime("%Y-%m-%d %H:%M:%S"))
         unit_data.append(reg.contest)
         unit_data.append("Approved" if reg.is_approved else "Pending")
-        unit_data.append(reg.team_name)
-        unit_data.append(reg.group_members_count)
         member = reg.groupmember_set.all().first()
         info = member.name.title()
         info += f" ({member.inst},"
