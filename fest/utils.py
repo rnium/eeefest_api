@@ -1,5 +1,6 @@
 from fest.models import Registration
 
+
 def get_registrations_queryset(contest, approval):
     registrations = None
     if contest == 'all':
@@ -22,10 +23,12 @@ def get_registrations_queryset(contest, approval):
         registrations = registrations.order_by('is_approved', '-added_at')
     return registrations
 
+
 def get_group_type_excel_data(contest, approval):
     registrations = list(get_registrations_queryset(contest, approval))
     data = []
-    header = ["SL", 'Applied at', 'Contest', 'Approval Status', 'Team Name', 'Total Members', 'Team Leader']
+    header = ["SL", 'Applied at', 'Contest', 'Approval Status',
+              'Team Name', 'Total Members', 'Team Leader']
     max_members = 1
     for index, reg in enumerate(registrations):
         unit_data = [index+1]
@@ -39,16 +42,21 @@ def get_group_type_excel_data(contest, approval):
         for member in group_members_qs:
             info = member.name.title()
             info += f" ({member.inst},"
-            if reg_num:=member.reg_num:
+            if reg_num := member.reg_num:
                 info += f" Registration No.{reg_num},"
-            if dept:=member.dept:
+            if dept := member.dept:
                 info += f" Department: {dept},"
-            if tshirt:=member.tshirt:
+            if tshirt := member.tshirt:
                 info += f" Tshirt: {tshirt.upper()},"
-            if phone:=member.phone:
+            if phone := member.phone:
                 info += f" Phone: {phone},"
-            if email:=member.email:
+            if email := member.email:
                 info += f" Email: {email.lower()})"
+            if reg.contest == 'gaming-fifa':
+                if member.game_controller:
+                    info += f" Controller: {member.get_game_controller_display()})"
+                else:
+                    info += f" Controller: <Not Selected>"
             unit_data.append(info)
         data.append(unit_data)
     header.extend([f"Group Member {i+1}" for i in range(1, max_members)])
@@ -59,7 +67,8 @@ def get_group_type_excel_data(contest, approval):
 def get_individual_type_excel_data(contest, approval):
     registrations = list(get_registrations_queryset(contest, approval))
     data = []
-    header = ["SL", 'Applied at', 'Contest', 'Approval status', 'Contestant Info']
+    header = ["SL", 'Applied at', 'Contest',
+              'Approval status', 'Contestant Info']
     for index, reg in enumerate(registrations):
         unit_data = [index+1]
         unit_data.append(reg.added_at.strftime("%Y-%m-%d %H:%M:%S"))
@@ -68,17 +77,20 @@ def get_individual_type_excel_data(contest, approval):
         member = reg.groupmember_set.all().first()
         info = member.name.title()
         info += f" ({member.inst},"
-        if reg_num:=member.reg_num:
+        if reg_num := member.reg_num:
             info += f" Registration No.{reg_num},"
-        if dept:=member.dept:
+        if dept := member.dept:
             info += f" Department: {dept},"
-        if phone:=member.phone:
+        if phone := member.phone:
             info += f" Phone: {phone},"
-        if email:=member.email:
+        if email := member.email:
             info += f" Email: {email.lower()})"
+        if reg.contest == 'gaming-fifa':
+            if member.game_controller:
+                info += f" Controller: {member.get_game_controller_display()})"
+            else:
+                info += f" Controller: <Not Selected>"
         unit_data.append(info)
         data.append(unit_data)
     data.insert(0, header)
     return data
-        
-      
