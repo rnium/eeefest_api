@@ -30,6 +30,10 @@ class Registration(models.Model):
 
     
 class GroupMember(models.Model):
+    controller_options = [
+        ('keyb', 'Keyboard'),
+        ('joys', 'Joystick'),
+    ]
     registration = models.ForeignKey(Registration, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     inst = models.CharField(max_length=200)
@@ -38,4 +42,5 @@ class GroupMember(models.Model):
     tshirt = models.CharField(max_length=5, null=True, blank=True)
     phone = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
+    game_controller = models.CharField(max_length=5, choices=controller_options, null=True, blank=True)
     
