@@ -1,0 +1,216 @@
+@page {
+  margin: 1.5cm;
+  size: 210mm 297mm;
+}
+* {
+  font-family: RobotoRegular;
+}
+
+body .top .heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+body .top .heading .event-name {
+  display: flex;
+  flex-direction: row;
+  width: 250px;
+  align-items: center;
+}
+body .top .heading .event-name .text {
+  display: flex;
+  flex-direction: column;
+  font-family: DoctorGlitch;
+  font-size: 1.5rem;
+}
+body .top .heading .event-name .version {
+  font-family: DoctorGlitch;
+  font-size: 3.2rem;
+}
+body .top .heading .contest {
+  display: flex;
+  flex-direction: row;
+  width: 260px;
+  justify-content: center;
+  align-items: center;
+}
+body .top .heading .contest img {
+  width: 60px;
+}
+body .top .heading .contest .title {
+  font-family: RobotoMedium;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  text-align: right;
+  padding-right: 5px;
+}
+body .top .sub-heading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+body .top .sub-heading div {
+  font-size: 1.4rem;
+  background-color: #1565c0;
+  color: white;
+  padding: 5px 2rem;
+  border-radius: 180px;
+}
+body .main {
+  width: 97%;
+  border: 2px solid #1c60ad;
+  padding: 10px;
+  margin-top: 2rem;
+  font-size: 0.8rem;
+}
+body .main .meta {
+  display: flex;
+  flex-direction: row;
+}
+body .main .meta .left {
+  width: 60%;
+}
+body .main .meta .right {
+  padding: 5px;
+  width: 40%;
+}
+body .main .meta .right .qr-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+body .main .meta .right .qr-container img {
+  width: 110px;
+  justify-self: flex-end;
+}
+body .main .members-info {
+  margin-top: 1rem;
+  width: 98%;
+  border: 1px solid #646363;
+  padding: 5px;
+}
+body .main .members-info .title {
+  font-family: RobotoMedium;
+  background-color: #dde1e6;
+  padding: 5px;
+  text-align: center;
+}
+body .main .members-info .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+body .main .members-info .container .member {
+  margin-top: 10px;
+}
+body .main .members-info .container .member .designation {
+  font-family: RobotoMedium;
+  color: #1565c0;
+  margin: 5px 0;
+  text-align: center;
+  font-weight: bold;
+}
+body .main .members-info .container .member table {
+  width: 100%;
+  border-left: 1px solid #1565c0;
+  border-bottom: 1px solid #1565c0;
+}
+body .main .members-info .container .member table tr td {
+  font-size: 0.7rem;
+}
+body .main .members-info .container .member table tr td .tshirt-size {
+  display: inline-block;
+  background-color: #1565c0;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 5px;
+  font-size: 0.5rem;
+  margin-right: 5px;
+}
+body .main .members-info .container .member table tr td:nth-child(1) {
+  color: #1565c0;
+  width: 100px;
+}
+body .main .members-info .container .member table tr:nth-child(odd) {
+  background-color: #dde1e6;
+}
+body .main .members-info .container .member:nth-child(even) {
+  margin-right: 5px;
+}
+body .main .members-info .container .full-width {
+  width: 98%;
+}
+body .main .members-info .container .half-width {
+  width: 49%;
+}
+body .main .instructions {
+  margin-top: 10px;
+  padding: 10px;
+}
+body .main .instructions .title {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+body .main .instructions ul {
+  margin: 0;
+  padding: 0;
+}
+body .main .instructions ul li {
+  font-size: 0.7rem;
+}
+body .footer {
+  position: absolute;
+  width: 97%;
+  bottom: 0;
+  left: 10px;
+}
+body .footer .container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+body .footer .container img {
+  width: 140px;
+  margin-right: 10px;
+}
+body .footer .container .info {
+  display: flex;
+  flex-direction: column;
+}
+body .footer .container .info div:first-of-type {
+  color: #6b7a77;
+}
+body .server-info {
+  position: absolute;
+  right: -6rem;
+  bottom: 5rem;
+  transform: rotate(-90deg);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+body .server-info div {
+  font-size: 7px;
+  color: #6b7a77;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+}
+.info .label {
+  color: #1565c0;
+  margin-right: 1rem;
+}
+.info .value {
+  color: black;
+}/*# sourceMappingURL=style.css.map */

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import FileResponse, HttpResponse
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -9,6 +9,8 @@ from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.styles import Alignment
 from .utils import get_group_type_excel_data, get_individual_type_excel_data
+from fest.pdf_generators.entrypass.entrypass_generator import render_entrypass
+from fest.models import Registration
 
 
 def admin_required(view_func):
@@ -60,3 +62,11 @@ def download_response_excel(request):
         content_type='application/vnd.ms-excel', 
         filename=filename, as_attachment=True
     )
+    
+    
+def download_entrypass(request, pk):
+    reg = get_object_or_404(Registration, pk=pk)
+    doc_pdf = render_entrypass(reg)
+    filename = f"Technoventure3.0 Entrypass.pdf"
+    return FileResponse(ContentFile(doc_pdf), filename=filename)
+    
