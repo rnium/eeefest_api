@@ -1,5 +1,53 @@
+from django.conf import settings
+from django.urls import reverse
 from fest.models import Registration
 import base64
+from email.message import EmailMessage
+from email.utils import formataddr
+from django.template.loader import render_to_string
+import ssl
+import smtplib
+
+
+def send_html_email(receiver, subject, body):
+    sender = settings.EMAIL_HOST_USER
+    password = settings.EMAIL_HOST_PASSWORD
+    host = settings.EMAIL_HOST
+    port = settings.EMAIL_PORT
+    
+    em = EmailMessage()
+    em['From'] = formataddr(("TechnoVenture3.0", sender))
+    em['To'] = receiver
+    em['Subject'] = subject
+    em.set_content(body, subtype='html')
+    
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL(host, port, context=context) as smtp:
+        smtp.login(sender, password)
+        smtp.sendmail(sender, receiver, em.as_string())
+
+
+
+def send_confirmation_email(baseUrl, registration):
+    email_subject = "Confirmation of Contest Registration and Entry Pass Download Link"
+    all_members = registration.groupmember_set.all()
+    receiver = None
+    member_name = ""
+    for member in all_members:
+        if mail_id:=member.email:
+            receiver = mail_id
+            member_name = member.name
+            break
+    reg_code = get_encoded_reg_id(registration)
+    link = baseUrl + reverse('download_entrypass', args=(reg_code,))
+    email_body = render_to_string('fest/email/reg_confirmation.html', context={
+        "member_name": member_name,
+        "contest": registration.get_contest_display(),
+        "entrypass_url": link,
+    })
+    send_html_email(receiver, email_subject, email_body)
+        
 
 def get_encoded_reg_id(reg: Registration):
     raw_str = f"{reg.id}-{reg.contest}"

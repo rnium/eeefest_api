@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    {% autoescape off %}
+    <p>Dear {{member_name}},</p>
+    <p>We are delighted to inform you that your registration for the {{contest}} has been successfully confirmed! Thank you for your participation, and we look forward to your involvement in the upcoming contest.</p>
+    <p>As a confirmed participant, you've been provided the link to download your entry pass. Please click on the following link to download your entry pass:</p>
+    <p><a href="{{entrypass_url}}">{{entrypass_url}}</a></p>
+    <p>Kindly ensure that you have your entry pass with you on the day of the contest as it serves as your official access to the event venue.</p>
+    <p>If you have any questions or encounter any issues with the download process, feel free to reach out to our support team for assistance.</p>
+    <p>Once again, thank you for being part of TechnoVenture3.0, and we wish you the best of luck!</p>
+    <p>Best regards,</p>
+    <div>EEE Association</div>
+    <div>Department of EEE</div>
+    <div>Sylhet Engineering College, Sylhet</div>
+    {% endautoescape %}
+</body>
+</html>
