@@ -70,75 +70,80 @@
             <div class="title">Group Members</div>
             <div class="container">
                 <div class="member full-width">
-                    <div class="designation">Team Leader</div>
+                    <div class="designation">{{member_context.first_member.title}}</div>
                     <table>
                         <tbody>
                             <tr>
                                 <td>Name:</td>
-                                <td>Lorem Ipsum Dolor</td>
+                                <td>{{member_context.first_member.obj.name}} {% if registration.contest == 'lfr' %}<span class="tshirt-size">{{member_context.first_member.obj.tshirt}}</span>{% endif %} </td>
                             </tr>
                             <tr >
                                 <td>Instituition:</td>
-                                <td>Lorem Ipsum Dolor Lorem, ipsum</td>
+                                <td>{{member_context.first_member.obj.inst}}</td>
                             </tr>
+                            {% if member_context.first_member.obj.dept %}
                             <tr >
                                 <td>Department:</td>
-                                <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel, deleniti.</td>
+                                <td>{{member_context.first_member.obj.dept}}</td>
                             </tr>
+                            {% endif %}
+                            {% if member_context.first_member.title == 'Contestant Info' %}
+                                {% if member_context.first_member.obj.reg_num %}
+                                <tr >
+                                    <td>Reg. No.:</td>
+                                    <td>{{member_context.first_member.obj.reg_num}}</td>
+                                </tr>
+                                {% endif %}
+                                {% if registration.contest == 'gaming-fifa' %}
+                                <tr >
+                                    <td>Game Controller:</td>
+                                    <td>{{member_context.first_member.obj.get_game_controller_display}}</td>
+                                </tr>
+                                {% endif %}
+                                
+                            {% endif %}
                             <tr >
                                 <td>Phone:</td>
-                                <td>01717942356</td>
+                                <td>{{member_context.first_member.obj.phone}}</td>
+                            </tr>
+                            <tr >
+                                <td>Email:</td>
+                                <td>{{member_context.first_member.obj.email}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                
-                <div class="member half-width">
-                    <div class="designation">Team Leader</div>
+                {% for g_member in member_context.group_members %}
+                <div class="member {{g_member.className}}">
+                    <div class="designation">{{g_member.title}}</div>
                     <table>
                         <tbody>
                             <tr>
                                 <td>Name:</td>
-                                <td>Lorem Ipsum Dolor <span class="tshirt-size">XL</span> </td>
+                                <td>{{g_member.obj.name}} {% if registration.contest == 'lfr' %}<span class="tshirt-size">{{g_member.obj.tshirt}}</span>{% endif %} </td>
                             </tr>
                             <tr >
                                 <td>Instituition:</td>
-                                <td>Lorem Ipsum Dolor Lorem, ipsum</td>
+                                <td>{{g_member.obj.inst}}</td>
                             </tr>
                             <tr >
                                 <td>Department:</td>
-                                <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel, deleniti.</td>
+                                <td>{{g_member.obj.dept}}</td>
                             </tr>
+                            
                             <tr >
                                 <td>Phone:</td>
-                                <td>01717942356</td>
+                                <td>{{g_member.obj.phone}}</td>
+                            </tr>
+                            
+                            <tr >
+                                <td>Email:</td>
+                                <td>{{g_member.obj.email}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="member half-width">
-                    <div class="designation">Team Leader</div>
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>Name:</td>
-                                <td>Lorem Ipsum Dolor</td>
-                            </tr>
-                            <tr >
-                                <td>Instituition:</td>
-                                <td>Lorem Ipsum Dolor Lorem, ipsum</td>
-                            </tr>
-                            <tr >
-                                <td>Department:</td>
-                                <td>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Vel, deleniti.</td>
-                            </tr>
-                            <tr >
-                                <td>Phone:</td>
-                                <td>01717942356</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                {% endfor %}
             </div>
         </div>
         <div class="instructions">

@@ -49,6 +49,35 @@ def get_fonts_css_txt(font_names):
     return css_text
 
 
+def get_member_context(registration):
+    members = registration.groupmember_set.all()
+    members_count = members.count()
+    group_members = []
+    first_member = members.first()
+    if members_count == 2:
+        member = list(members)[1]
+        group_members.append({
+            'className': 'full-width',
+            'title': 'Group Member 2',
+            'obj': member
+        })
+    elif members_count > 2:
+        for idx, member in enumerate(list(members)[1:]):
+            group_members.append({
+                'className': 'half-width',
+                'title': f'Group Member {idx+2}',
+                'obj': member
+            })
+    context = {
+        'first_member': {
+            'title': "Team Leader" if members_count > 1 else "Contestant Info",
+            'obj': first_member
+        },
+        'group_members': group_members
+    }
+    return context
+    
+
 def render_entrypass(request, registration):
     context = {'qrcode_path': get_qr_code_path(request, registration.id)}
     context['schedule'] = schedules.get(registration.contest, 'N/A')
@@ -59,6 +88,7 @@ def render_entrypass(request, registration):
     formatted_time = datetime.now().strftime("%a, %d %b %Y %H:%M:%S UTC")
     context['server_time'] = formatted_time
     context['registration'] = registration
+    context['member_context'] = get_member_context(registration)
     html_text = render_to_string('fest/pdf_templates/entrypass.html', context=context)
     fonts = {
         'DoctorGlitch': 'DoctorGlitch.otf',
