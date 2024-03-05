@@ -4,6 +4,29 @@ from io import BytesIO
 from django.conf import settings
 from django.template.loader import render_to_string
 from datetime import datetime
+from django.urls import reverse
+import os
+import qrcode
+
+
+def get_qr_code_path(request, reg_id):
+    qrcode_filepath = settings.BASE_DIR / f'media/temp/reg_{reg_id}.png'
+    os.makedirs("media/temp/", exist_ok=True)
+    # if os.path.exists(qrcode_filepath):
+    #     return qrcode_filepath
+    link = request.build_absolute_uri(reverse('verify_registration', args=(reg_id,)))
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=1,
+    )
+    qr.add_data(link)
+    qr.make(fit=True)
+
+    img = qr.make_image(fill_color="black", back_color="white")
+    img.save(qrcode_filepath)
+    return qrcode_filepath
 
 
 def get_fonts_css_txt(font_names):
@@ -16,8 +39,8 @@ def get_fonts_css_txt(font_names):
     return css_text
 
 
-def render_entrypass(registration):
-    context = {}
+def render_entrypass(request, registration):
+    context = {'qrcode_path': get_qr_code_path(request, registration.id)}
     contest_logo = settings.BASE_DIR/f'fest/pdf_generators/images/{registration.contest}.png'
     eee_logo = settings.BASE_DIR/f'fest/pdf_generators/images/sec_eee.png'
     context['contest_logo'] = contest_logo

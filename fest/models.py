@@ -4,12 +4,12 @@ from django.contrib.auth.models import User
 
 class Registration(models.Model):
     contest_choices = [
-        ('lfr', "Line Following"),
+        ('lfr', "Line Follower Robot"),
         ('poster', "Poster Presentation"),
-        ('circuit-solve', "Circuit Solve"),
-        ('integration', "Integration"),
-        ('gaming-fifa', "Gaming [FIFA]"),
-        ('gaming-chess', "Gaming [Chess]"),
+        ('circuit-solve', "Circuit Master"),
+        ('integration', "Integration Bee"),
+        ('gaming-fifa', "Gaming Contest FIFA"),
+        ('gaming-chess', "Gaming Contest Chess"),
     ]
     gateways = [
         ('bkash', 'bKash'),
@@ -24,6 +24,7 @@ class Registration(models.Model):
     transaction_id = models.CharField(max_length=100, null=True, blank=True)
     ip_address = models.GenericIPAddressField()
     is_approved = models.BooleanField(default=False)
+    is_email_sent = models.BooleanField(default=False)
     approved_by = models.ForeignKey(User, null=True, blank=True, on_delete=models.SET_NULL)
     approved_at = models.DateTimeField(null=True, blank=True)
     added_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)

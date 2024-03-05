@@ -1,0 +1,37 @@
+<!DOCTYPE html> {% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'fest/styles/style.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Verify Registration</title>
+</head>
+<body {% if reg %}class="success"{% else %}class="error"{% endif %}>
+    <header>
+        <div class="logo-con flex-col">
+            <img src="{% static 'images/logo.png' %}" alt="">
+        </div>
+    </header>
+    <main>
+        <div class="container flex-col">
+            {% if reg  %}
+            <div class="icon success flex-col">
+                <i class='bx bxs-badge-check' ></i>
+                <div class="meta">
+                    <div class="info">Registration Id: {{reg.id}}</div>
+                    <div class="info">Contest: {{reg.get_contest_display}}</div>
+                    <div class="info">Applied At: {{reg.added_at|date:"g:i:sA, j F Y"}}</div>
+                </div>
+            </div>
+            {% else %}
+            <div class="icon error flex-col">
+                <i class='bx bxs-x-circle'></i>
+                <div class="status">Invalid Registration</div>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

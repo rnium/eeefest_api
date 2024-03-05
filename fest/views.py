@@ -21,7 +21,10 @@ def admin_required(view_func):
             return HttpResponse("Access Denied")
     return inner
         
-    
+def verify_registration(request, pk):
+    reg = Registration.objects.filter(pk=pk, is_approved=True).first()
+    return render(request, 'fest/verify_reg.html', context={'reg': reg})
+     
 
 def download_asset(request, filename):
     filepath = settings.BASE_DIR / ('frontend/main_site/static/assets/' + filename)
@@ -66,7 +69,9 @@ def download_response_excel(request):
     
 def download_entrypass(request, pk):
     reg = get_object_or_404(Registration, pk=pk)
-    doc_pdf = render_entrypass(reg)
+    if not reg.is_approved:
+        return HttpResponse("Registration is not approved")
+    doc_pdf = render_entrypass(request, reg)
     filename = f"Technoventure3.0 Entrypass.pdf"
     return FileResponse(ContentFile(doc_pdf), filename=filename)
     

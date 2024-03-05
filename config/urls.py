@@ -28,6 +28,7 @@ urlpatterns = [
     path('assets/<str:filename>', views.download_asset),
     path('responseexcel/', views.download_response_excel, name="download_response_excel"),
     path('entrypass/<int:pk>/', views.download_entrypass, name="download_entrypass"),
+    path('verify-registration/<int:pk>/', views.verify_registration, name="verify_registration"),
     # react apps
     path('admin', TemplateView.as_view(template_name='admin_site/index.html')),
     path('admin/', TemplateView.as_view(template_name='admin_site/index.html')),
