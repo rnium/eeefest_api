@@ -152,6 +152,9 @@
                 <li>This Entry Pass is your gateway to all the contest activities and amenities. Please keep a printed copy of it.</li>
                 <li>Plan to arrive at least 30 minutes before the contest start time to allow for familiarization with the venue.</li>
                 <li>Familiarize yourself with the contest rules and guidelines, and make sure you understand the format, scoring system, and any specific requirements.</li>
+                {% for note in additional_notes %}
+                <li>{{note}}</li>
+                {% endfor %}
                 <li>Should you have any inquiries or require assistance during the event, our dedicated staff members and organizers at the venue are here to help.</li>
             </ul>
         </div>

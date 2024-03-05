@@ -18,6 +18,38 @@ schedules = {
     'gaming-chess': '3:00 PM, 9 March 2024',
 }
 
+contest_rules = {
+    'circuit-solve': [
+        'Any form of cheating or plagiarism will result in immediate disqualification.',
+        'Respectful and sportsmanlike conduct is expected from all participants.',
+        'You can raise concerns or disputes with the judges, but it must be done in a respectful and timely manner.',
+    ],
+    'integration': [
+        'The Integration Bee will follow a specific format. Participants are responsible for understanding the rules and the structure of the competition.',
+        'Maintain a quiet and focused atmosphere. Participants are expected to respect opponents and avoid any disruptive behavior during the contest.',
+        'Food and drinks are allowed in designated areas only. Please keep the contest area clean.',
+        'In case of emergency, follow instructions from the Integration Bee organizers and venue staff.',
+        "The decision of the judges on all matters is considered final and binding. There will be no reconsideration or review of decisions once they have been rendered."
+    ],
+    'gaming-chess': [
+        'Fair play is paramount. Any form of cheating, including electronic devices, is strictly prohibited. Violators will be disqualified.',
+        'Maintain a quiet and focused atmosphere. Participants are expected to respect opponents and refrain from any disruptive behavior.',
+        'All disputes and rule clarifications will be addressed by the tournament arbiters. Their decisions are final and binding.',
+        'In case of emergency, follow instructions from the tournament organizers and venue staff.',
+        "The decision of the judges on all matters is considered final and binding. There will be no reconsideration or review of decisions once they have been rendered."
+    ],
+    'gaming-fifa': [
+        'Players can bring their controller/keyboard. The player must set his own control setup for custom control.',
+        "The gaming platform is 'PC'",
+        'All players are required to show up at least half an hour before the tournament and report to the organizers to get their desired pc.',
+        'Players not present at the designated time for any match will be disqualified, the opponent will be the winner at 3-0 scores.',
+        'One button or two buttons control mode is not allowed.',
+        'For any difficulties, the player must inform the referee to make any decisions.',
+        'After finishing the game players have to wait until the referee finishes scoring',
+        'Only scores reported by the referee are official.',
+    ]
+}
+
 
 def get_qr_code_path(request, reg_id):
     qrcode_filepath = settings.BASE_DIR / f'media/temp/reg_{reg_id}.png'
@@ -89,6 +121,7 @@ def render_entrypass(request, registration):
     context['server_time'] = formatted_time
     context['registration'] = registration
     context['member_context'] = get_member_context(registration)
+    context['additional_notes'] = contest_rules.get(registration.contest)
     html_text = render_to_string('fest/pdf_templates/entrypass.html', context=context)
     fonts = {
         'DoctorGlitch': 'DoctorGlitch.otf',

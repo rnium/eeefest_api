@@ -8,7 +8,7 @@ from io import BytesIO
 from openpyxl import Workbook
 from datetime import datetime
 from openpyxl.styles import Alignment
-from .utils import get_group_type_excel_data, get_individual_type_excel_data
+from .utils import get_group_type_excel_data, get_individual_type_excel_data, get_encoded_reg_id, get_decoded_reg_id
 from fest.pdf_generators.entrypass.entrypass_generator import render_entrypass
 from fest.models import Registration
 
@@ -67,7 +67,11 @@ def download_response_excel(request):
     )
     
     
-def download_entrypass(request, pk):
+def download_entrypass(request, reg_code):
+    try:
+        pk = get_decoded_reg_id(reg_code)
+    except Exception as e:
+        return HttpResponse("Registration Unknown")
     reg = get_object_or_404(Registration, pk=pk)
     if not reg.is_approved:
         return HttpResponse("Registration is not approved")

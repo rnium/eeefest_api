@@ -1,4 +1,17 @@
 from fest.models import Registration
+import base64
+
+def get_encoded_reg_id(reg: Registration):
+    raw_str = f"{reg.id}-{reg.contest}"
+    encoded = base64.b64encode(raw_str.encode())
+    return encoded.decode(encoding="utf-8")
+
+
+def get_decoded_reg_id(code):
+    decoded = base64.b64decode(code.encode())
+    text = decoded.decode()
+    reg_id = int(text.split("-")[0])
+    return reg_id
 
 
 def get_registrations_queryset(contest, approval):
