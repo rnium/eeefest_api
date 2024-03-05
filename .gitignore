@@ -10,6 +10,7 @@ playground.py
 db.sqlite3
 db.sqlite3-journal
 media
+pgdata
 create_test_data_*.*
 backup.json
 fixtures.json
