@@ -9,11 +9,21 @@ import os
 import qrcode
 
 
+schedules = {
+    'lfr': '9:00 AM, 10 March 2024',
+    'poster': '10:00 AM, 10 March 2024',
+    'circuit-solve': '10:15 AM, 9 March 2024',
+    'integration': '11:00 AM, 9 March 2024',
+    'gaming-fifa': '5:00 PM, 9 March 2024',
+    'gaming-chess': '3:00 PM, 9 March 2024',
+}
+
+
 def get_qr_code_path(request, reg_id):
     qrcode_filepath = settings.BASE_DIR / f'media/temp/reg_{reg_id}.png'
     os.makedirs("media/temp/", exist_ok=True)
-    # if os.path.exists(qrcode_filepath):
-    #     return qrcode_filepath
+    if os.path.exists(qrcode_filepath):
+        return qrcode_filepath
     link = request.build_absolute_uri(reverse('verify_registration', args=(reg_id,)))
     qr = qrcode.QRCode(
         version=1,
@@ -41,6 +51,7 @@ def get_fonts_css_txt(font_names):
 
 def render_entrypass(request, registration):
     context = {'qrcode_path': get_qr_code_path(request, registration.id)}
+    context['schedule'] = schedules.get(registration.contest, 'N/A')
     contest_logo = settings.BASE_DIR/f'fest/pdf_generators/images/{registration.contest}.png'
     eee_logo = settings.BASE_DIR/f'fest/pdf_generators/images/sec_eee.png'
     context['contest_logo'] = contest_logo
