@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from .utils import check_registration_data
-from fest.utils import get_registrations_queryset
+from fest.utils import get_registrations_queryset, send_deletion_notification_email
 
 @api_view()
 def get_admin_username(request):
@@ -73,10 +73,28 @@ def create_registration(request):
 def approve_registration(request, pk):
     reg = get_object_or_404(Registration, pk=pk)
     if reg.is_approved:
-        return Response(data={"info": f'Regisration: {reg.id} Already Approved!'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data={"detail": f'Regisration: {reg.id} Already Approved!'}, status=status.HTTP_400_BAD_REQUEST)
     reg.is_approved = True
     reg.approved_by = request.user
     reg.approved_at = timezone.now()
     reg.save()
     return Response(data={"info": f'Regisration: {reg.id} Approved'})
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_registration(request):
+    if not request.user.is_staff:
+        return Response(data={"detail": f'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+    pk = request.data.get('regId')
+    reason = request.data.get('reason')
+    if not all([pk, reason]) or not pk.isdigit():
+        return Response(data={"detail": 'Ivalid Data'}, status=status.HTTP_400_BAD_REQUEST)
+    reg = get_object_or_404(Registration, pk=pk)
+    try:
+        send_deletion_notification_email(reg, reason)
+    except Exception as e:
+        return Response(data={"detail": f'Email Sending Failed. Error: {e}'}, status=status.HTTP_400_BAD_REQUEST)
+    reg.delete()
+    return Response(data={"info": f"Registration deleted"})
+    
     

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<body> 
+    <!-- Contest Registration Deletion Notification -->
+    {% autoescape off %}
+    <p>Dear {{member_name}},</p>
+    <p>We regret to inform you that your registration with id: {{reg_id}} for the contest {{contest_name}} in TechnoVenture3.0 has been deleted.</p>
+    <p>Reason for Deletion: <strong>{{reason}}</strong></p>
+    <p>If you believe this action was a mistake, please feel free to reply to this email or contact our support team.</p>
+    <p></p>
+    <p>Best regards,</p>
+    <div>EEE Association</div>
+    <div>Department of EEE</div>
+    <div>Sylhet Engineering College, Sylhet</div>
+    {% endautoescape %}
+</body>
+</html>

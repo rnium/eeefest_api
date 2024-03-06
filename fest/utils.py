@@ -47,6 +47,26 @@ def send_confirmation_email(baseUrl, registration):
         "entrypass_url": link,
     })
     send_html_email(receiver, email_subject, email_body)
+    
+    
+def send_deletion_notification_email(registration, reason):
+    email_subject = "Contest Registration Deletion Notification"
+    all_members = registration.groupmember_set.all().order_by('id')
+    receiver = None
+    member_name = ""
+    for member in all_members:
+        if mail_id:=member.email:
+            receiver = mail_id
+            member_name = member.name
+            break
+    
+    email_body = render_to_string('fest/email/reg_deletion.html', context={
+        "member_name": member_name,
+        "contest_name": registration.get_contest_display(),
+        "reg_id": registration.id,
+        "reason": reason,
+    })
+    send_html_email(receiver, email_subject, email_body)
         
 
 def get_encoded_reg_id(reg: Registration):
