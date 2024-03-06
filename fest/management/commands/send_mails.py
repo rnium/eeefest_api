@@ -9,7 +9,8 @@ baseUrl = "https://www.seceeefest.tech"
 class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any):
         count = 0
-        for reg in Registration.objects.filter(is_approved=True, is_email_sent=False):
+        registrations = Registration.objects.filter(is_approved=True, is_email_sent=False)
+        for reg in registrations:
             try:
                 send_confirmation_email(baseUrl, reg)
             except Exception as e:
@@ -18,4 +19,5 @@ class Command(BaseCommand):
             count += 1
             reg.is_email_sent = True
             reg.save()
-        self.stdout.write(self.style.SUCCESS(f"Done, total emails sent: {count}"))
+            self.stdout.write(self.style.SUCCESS(f"email sent reg id: {reg.id} - [{count} of {registrations.count()}]"))
+        self.stdout.write(self.style.SUCCESS(f"COMPLETED, Total emails sent: {count}"))
