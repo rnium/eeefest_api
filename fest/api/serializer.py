@@ -6,6 +6,7 @@ from django.urls import reverse
 class RegistrationSerializer(serializers.ModelSerializer):
     team_leader = serializers.SerializerMethodField()
     approval_link = serializers.SerializerMethodField()
+    confirmation_link = serializers.SerializerMethodField()
     approved_by = serializers.SerializerMethodField()
     class Meta:
         model = Registration
@@ -22,7 +23,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
             return "<empty>"
     
     def get_approval_link(self, obj):
-        return reverse("fest_api:approve_registration", args=(obj.id,))
+        return reverse("fest_api:approve_registration", args=(obj.id,)) 
+       
+    def get_confirmation_link(self, obj):
+        if not obj.is_email_sent:
+            return reverse("fest_api:send_registration_confirmation", args=(obj.id,))
+        return ""
     
     def get_approved_by(self, obj):
         if not obj.is_approved:

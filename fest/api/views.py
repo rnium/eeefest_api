@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from .utils import check_registration_data
-from fest.utils import get_registrations_queryset, send_deletion_notification_email
+from fest.utils import get_registrations_queryset, send_confirmation_email, send_deletion_notification_email
 
 @api_view()
 def get_admin_username(request):
@@ -80,6 +80,24 @@ def approve_registration(request, pk):
     reg.save()
     return Response(data={"info": f'Regisration: {reg.id} Approved'})
 
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def send_registration_confirmation(request, pk):
+    if not request.user.is_staff:
+        return Response(data={"detail": f'Forbidden'}, status=status.HTTP_403_FORBIDDEN)
+    reg = get_object_or_404(Registration, pk=pk)
+    if reg.is_email_sent:
+        return Response(data={"detail": f'Regisration: {reg.id} Email Already Sent'}, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        send_confirmation_email("https://www.seceeefest.tech", reg)
+    except Exception as e:
+        return Response(data={"detail": f'Email Sending Failed. Error: {e}'}, status=status.HTTP_400_BAD_REQUEST)
+    reg.is_email_sent = True
+    reg.save()
+    return Response(data={"info": f'Regisration: {reg.id} Approved'})
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def delete_registration(request):
@@ -96,5 +114,3 @@ def delete_registration(request):
         return Response(data={"detail": f'Email Sending Failed. Error: {e}'}, status=status.HTTP_400_BAD_REQUEST)
     reg.delete()
     return Response(data={"info": f"Registration deleted"})
-    
-    
