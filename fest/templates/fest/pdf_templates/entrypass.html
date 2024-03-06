@@ -67,10 +67,16 @@
             </div>
         </div>
         <div class="members-info">
+            {% if member_context.first_member.title == 'Contestant Info' %}
+            <div class="title">{{member_context.first_member.title}}</div>
+            {% else %}
             <div class="title">Group Members</div>
+            {% endif %}
             <div class="container">
                 <div class="member full-width">
+                    {% if member_context.first_member.title != 'Contestant Info' %}
                     <div class="designation">{{member_context.first_member.title}}</div>
+                    {% endif %}
                     <table>
                         <tbody>
                             <tr>

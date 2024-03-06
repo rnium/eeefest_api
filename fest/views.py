@@ -21,8 +21,16 @@ def admin_required(view_func):
             return HttpResponse("Access Denied")
     return inner
         
-def verify_registration(request, pk):
-    reg = Registration.objects.filter(pk=pk, is_approved=True).first()
+def verify_registration(request, reg_code):
+    pk = None
+    try:
+        pk = get_decoded_reg_id(reg_code)
+    except Exception as e:
+        pass
+    if pk:
+        reg = Registration.objects.filter(pk=pk, is_approved=True).first()
+    else:
+        reg = None
     return render(request, 'fest/verify_reg.html', context={'reg': reg})
      
 

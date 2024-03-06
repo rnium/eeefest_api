@@ -5,6 +5,7 @@ from django.conf import settings
 from django.template.loader import render_to_string
 from datetime import datetime
 from django.urls import reverse
+from fest.utils import get_encoded_reg_id
 import os
 import qrcode
 
@@ -45,18 +46,20 @@ contest_rules = {
         'Players not present at the designated time for any match will be disqualified, the opponent will be the winner at 3-0 scores.',
         'One button or two buttons control mode is not allowed.',
         'For any difficulties, the player must inform the referee to make any decisions.',
-        'After finishing the game players have to wait until the referee finishes scoring',
+        'After finishing the game players have to wait until the referee finishes scoring.',
         'Only scores reported by the referee are official.',
     ]
 }
 
 
-def get_qr_code_path(request, reg_id):
+def get_qr_code_path(request, reg):
+    reg_id = reg.id
+    code = get_encoded_reg_id(reg)
     qrcode_filepath = settings.BASE_DIR / f'media/temp/reg_{reg_id}.png'
     os.makedirs("media/temp/", exist_ok=True)
     if os.path.exists(qrcode_filepath):
         return qrcode_filepath
-    link = request.build_absolute_uri(reverse('verify_registration', args=(reg_id,)))
+    link = request.build_absolute_uri(reverse('verify_registration', args=(code,)))
     qr = qrcode.QRCode(
         version=1,
         error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -82,7 +85,7 @@ def get_fonts_css_txt(font_names):
 
 
 def get_member_context(registration):
-    members = registration.groupmember_set.all()
+    members = registration.groupmember_set.all().order_by('id')
     members_count = members.count()
     group_members = []
     first_member = members.first()
@@ -111,7 +114,7 @@ def get_member_context(registration):
     
 
 def render_entrypass(request, registration):
-    context = {'qrcode_path': get_qr_code_path(request, registration.id)}
+    context = {'qrcode_path': get_qr_code_path(request, registration)}
     context['schedule'] = schedules.get(registration.contest, 'N/A')
     contest_logo = settings.BASE_DIR/f'fest/pdf_generators/images/{registration.contest}.png'
     eee_logo = settings.BASE_DIR/f'fest/pdf_generators/images/sec_eee.png'

@@ -13,7 +13,7 @@ class Command(BaseCommand):
             try:
                 send_confirmation_email(baseUrl, reg)
             except Exception as e:
-                self.stdout.write(self.style.ERROR(f"Failed. Reg. Id: {reg.id}, error: {e}"))
+                self.stdout.write(self.style.ERROR(f"Failed. Reg. Id: {reg.id}, Error: {e}"))
                 continue
             count += 1
             reg.is_email_sent = True

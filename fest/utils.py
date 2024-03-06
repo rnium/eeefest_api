@@ -31,7 +31,7 @@ def send_html_email(receiver, subject, body):
 
 def send_confirmation_email(baseUrl, registration):
     email_subject = "Confirmation of Contest Registration and Entry Pass Download Link"
-    all_members = registration.groupmember_set.all()
+    all_members = registration.groupmember_set.all().order_by('id')
     receiver = None
     member_name = ""
     for member in all_members:
