@@ -1,31 +1,31 @@
-from django.conf import settings
 from django.urls import reverse
 from fest.models import Registration
 import base64
-from email.message import EmailMessage
-from email.utils import formataddr
 from django.template.loader import render_to_string
-import ssl
-import smtplib
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
+from django.conf import settings
+from django.core.exceptions import ValidationError
+
+
+sendgrid_api_key = settings.SENDGRID_API_KEY_1
+
+
 
 
 def send_html_email(receiver, subject, body):
-    sender = settings.EMAIL_HOST_USER
-    password = settings.EMAIL_HOST_PASSWORD
-    host = settings.EMAIL_HOST
-    port = settings.EMAIL_PORT
+    message = Mail(
+        from_email=('seceeefest2k24@gmail.com', "TechnoVenture3.0"),
+        to_emails=receiver,
+        subject=subject,
+        html_content=body)
     
-    em = EmailMessage()
-    em['From'] = formataddr(("TechnoVenture3.0", sender))
-    em['To'] = receiver
-    em['Subject'] = subject
-    em.set_content(body, subtype='html')
-    
-    context = ssl.create_default_context()
+    sg = SendGridAPIClient(sendgrid_api_key)
+    response = sg.send(message)
+    status = response.status_code
+    if status >= 400:
+        raise ValidationError("API Error")
 
-    with smtplib.SMTP_SSL(host, port, context=context) as smtp:
-        smtp.login(sender, password)
-        smtp.sendmail(sender, receiver, em.as_string())
 
 
 
