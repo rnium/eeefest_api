@@ -118,3 +118,6 @@ def delete_registration(request):
         return Response(data={"detail": f'Email Sending Failed. Error: {e}'}, status=status.HTTP_400_BAD_REQUEST)
     reg.delete()
     return Response(data={"info": f"Registration deleted"})
+
+# @api_view()
+# def get_entrypass(request):
