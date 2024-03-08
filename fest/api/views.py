@@ -6,12 +6,14 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+from django.conf import settings
 from .serializer import RegistrationSerializer
 from rest_framework import status
 from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from .utils import check_registration_data
 from fest.utils import get_registrations_queryset, send_confirmation_email, send_deletion_notification_email
+from datetime import datetime
 
 @api_view()
 def get_admin_username(request):
@@ -45,6 +47,8 @@ class RegistrationsList(ListAPIView):
     
 @api_view(['POST'])
 def create_registration(request):
+    if datetime.now() > settings.REGISTATION_DEADLINE:
+        return Response(data={'info': "Registration Closed"}, status=status.HTTP_400_BAD_REQUEST) 
     json_data = request.data
     data = json_data.get('formData')
     data['ip_address'] = request.META.get('REMOTE_ADDR')

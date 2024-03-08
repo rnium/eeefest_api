@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import environ
+from datetime import datetime
 
 
 env = environ.Env()
@@ -37,6 +38,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+
+REGISTATION_DEADLINE = datetime(2024, 3, 8, 6, 0, 0)
 
 INSTALLED_APPS = [
     'django.contrib.admin',
