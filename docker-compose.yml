@@ -1,23 +1,10 @@
-version: "3.8"
 services:
-  db:
-    restart: always
-    image: postgres:15-alpine
-    container_name: fest_database
-    volumes:
-      - ./pgdata:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mcnx8765
   app:
     build: .
-    image: eeefest_api:local
+    image: rnium/eeefest_api:latest
     container_name: eeefest
     volumes:
       - .:/app
     command: python manage.py runserver 0.0.0.0:8000
     ports:
       - 8000:8000
-    depends_on:
-      - db
