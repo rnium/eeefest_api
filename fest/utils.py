@@ -8,14 +8,14 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 
 
-sendgrid_api_key = settings.SENDGRID_API_KEY_1
-
+sendgrid_api_key = settings.SENDGRID_API_KEY
+sendgrid_from_email = settings.SENDGRID_FROM_EMAIL
 
 
 
 def send_html_email(receiver, subject, body):
     message = Mail(
-        from_email=('seceeefest2k24@gmail.com', "TechnoVenture3.0"),
+        from_email=(sendgrid_from_email, "TechnoVenture3.0"),
         to_emails=receiver,
         subject=subject,
         html_content=body)
@@ -29,7 +29,7 @@ def send_html_email(receiver, subject, body):
 
 
 
-def send_confirmation_email(baseUrl, registration):
+def send_confirmation_email(request, registration):
     email_subject = "Confirmation of Contest Registration and Entry Pass Download Link"
     all_members = registration.groupmember_set.all().order_by('id')
     receiver = None
@@ -40,7 +40,8 @@ def send_confirmation_email(baseUrl, registration):
             member_name = member.name
             break
     reg_code = get_encoded_reg_id(registration)
-    link = baseUrl + reverse('download_entrypass', args=(reg_code,))
+    relative_url = reverse('download_entrypass', args=(reg_code,))
+    link = request.build_absolute_uri(relative_url)
     email_body = render_to_string('fest/email/reg_confirmation.html', context={
         "member_name": member_name,
         "contest": registration.get_contest_display(),

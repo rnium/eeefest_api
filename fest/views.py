@@ -11,6 +11,8 @@ from openpyxl.styles import Alignment
 from .utils import get_group_type_excel_data, get_individual_type_excel_data, get_encoded_reg_id, get_decoded_reg_id
 from fest.pdf_generators.entrypass.entrypass_generator import render_entrypass
 from fest.models import Registration
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 
 
 def admin_required(view_func):
@@ -42,7 +44,8 @@ def download_asset(request, filename):
     return HttpResponse(f"File not found!")
 
 
-@admin_required
+@api_view()
+@permission_classes([IsAuthenticated])
 def download_response_excel(request):
     contest = request.GET.get('contest', 'all')
     approval = request.GET.get('approval', 'all')

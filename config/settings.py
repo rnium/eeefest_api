@@ -29,7 +29,8 @@ SECRET_KEY = env('SECRET_KEY')
 
 
 # Email configuration
-SENDGRID_API_KEY_1 = env('SENDGRID_API_KEY_1')
+SENDGRID_API_KEY = env('SENDGRID_API_KEY')
+SENDGRID_FROM_EMAIL = env('SENDGRID_FROM_EMAIL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,7 +40,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-REGISTATION_DEADLINE = datetime(2024, 3, 8, 6, 0, 0)
+REGISTATION_DEADLINE = datetime(2025, 3, 8, 6, 0, 0)
 
 INSTALLED_APPS = [
     'django.contrib.admin',

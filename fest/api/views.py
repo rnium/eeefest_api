@@ -72,7 +72,7 @@ def create_registration(request):
     return Response(data={'info': "Saved"})
 
 
-@api_view()
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def approve_registration(request, pk):
     reg = get_object_or_404(Registration, pk=pk)
@@ -85,7 +85,7 @@ def approve_registration(request, pk):
     return Response(data={"info": f'Regisration: {reg.id} Approved'})
 
 
-@api_view()
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_registration_confirmation(request, pk):
     if not request.user.is_staff:
@@ -94,7 +94,7 @@ def send_registration_confirmation(request, pk):
     if reg.is_email_sent:
         return Response(data={"detail": f'Regisration: {reg.id} Email Already Sent'}, status=status.HTTP_400_BAD_REQUEST)
     try:
-        send_confirmation_email("https://www.seceeefest.tech", reg)
+        send_confirmation_email(request, reg)
     except Exception as e:
         return Response(data={"detail": f'Email Sending Failed. Error: {e}'}, status=status.HTTP_400_BAD_REQUEST)
     reg.is_email_sent = True
