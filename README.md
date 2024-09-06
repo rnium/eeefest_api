@@ -1,5 +1,5 @@
 ![Proprietary](https://img.shields.io/badge/License-Proprietary-red)
-# Sylhet Engineering College Undergraduate Result Portal (SEC UGRP)
+# TechnoVenture 3.0 API Backend
 
 ## Getting Started
 
